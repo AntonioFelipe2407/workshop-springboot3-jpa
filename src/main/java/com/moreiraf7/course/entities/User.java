@@ -3,10 +3,12 @@ package com.moreiraf7.course.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_user")
+@Table(name = "tb_user")  // Anotation para renomear a tabela no DB
 public class User implements Serializable {
 
     @Id
@@ -16,6 +18,9 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+
+    @OneToMany (mappedBy = "client")
+    private List<Order> orders = new ArrayList<>(); // Instrui o JPA para tranformar a associação em chave estrangeira
 
     public User() {
     }
@@ -69,6 +74,10 @@ public class User implements Serializable {
         this.id = id;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,4 +101,5 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 '}';
     }
+
 }

@@ -1,5 +1,6 @@
 package com.moreiraf7.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -19,8 +20,9 @@ public class User implements Serializable {
     private String phone;
     private String password;
 
-    @OneToMany (mappedBy = "client")
-    private List<Order> orders = new ArrayList<>(); // Instrui o JPA para tranformar a associação em chave estrangeira
+    @JsonIgnore // Anotation para corrigir a associação de mão dupla e evitar loop
+    @OneToMany (mappedBy = "client") // Instrui o JPA para tranformar a associação em chave estrangeira
+    private List<Order> orders = new ArrayList<>();
 
     public User() {
     }

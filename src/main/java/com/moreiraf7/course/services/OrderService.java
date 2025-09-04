@@ -15,7 +15,7 @@ public class OrderService {
     @Autowired
     private OrderRepository repository; // injeção de depêndencia automática
 
-    //Metodo para retornar todos os users
+    //Metodo para retornar todos os order
     public List<Order> findAll() {
         return repository.findAll();
     }
@@ -23,6 +23,6 @@ public class OrderService {
     //Metodo para encontrar o user pelo id
     public Order findById(Long id) {
         Optional<Order> obj = repository.findById(id);
-        return obj.get(); // retorna o objeto do tipo user que estiver dentro de obj
+        return obj.get(); // retorna o objeto do tipo order que estiver dentro de obj
     }
 }

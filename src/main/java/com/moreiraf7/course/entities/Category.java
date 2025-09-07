@@ -1,5 +1,6 @@
 package com.moreiraf7.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_category")
+@Table(name = "tb_category") // Anotation para renomear a tabela no DB
 public class Category implements Serializable {
 
     @Id
@@ -16,7 +17,8 @@ public class Category implements Serializable {
     private Long id;
     private String name;
 
-    @Transient // Anotation provisória para impedir que o Jpa interprete esse atributo
+    @JsonIgnore // Anotation para corrigir a associação de mão dupla e evitar loop
+    @ManyToMany(mappedBy = "categories") // Referência para o mapeamento feito na classe Product
     private Set<Product> products = new HashSet<>();
 
     public Category() {

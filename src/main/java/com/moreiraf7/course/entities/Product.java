@@ -19,7 +19,10 @@ public class Product implements Serializable {
     private double price;
     private String imgUrl;
 
-    @Transient // Anotation provisória para impedir que o Jpa interprete esse atributo
+    @ManyToMany // Muitos para muitos
+    @JoinTable(name = "tb_product_category", // Dando o nome a tabela
+            joinColumns = @JoinColumn(name = "product_id"), // Nome da chave estrangeira referente a tabela Product
+            inverseJoinColumns = @JoinColumn(name = "category_id")) // Nome da chave estrangeira referente a tabela Category
     private Set<Category> categories = new HashSet<>(); // Utilizei o set para garantir que um produto não tenha a mesma categoria mais de uma vez
 
     public Product() {

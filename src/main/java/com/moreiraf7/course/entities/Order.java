@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_order")  // Anotation para renomear a tabela no DB
@@ -24,6 +26,10 @@ public class Order implements Serializable {
     @ManyToOne // Instrui o JPA para tranformar a associação em chave estrangeira
     @JoinColumn(name = "client_id") // Dando o nome da chave estrangeira no banco de dados
     private User client;
+
+    //Association orderItems
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
 
 
     public Order() {
@@ -70,6 +76,11 @@ public class Order implements Serializable {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    //get association
+    public Set<OrderItem> getItems(){
+        return items;
     }
 
     @Override

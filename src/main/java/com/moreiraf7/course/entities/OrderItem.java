@@ -1,9 +1,8 @@
 package com.moreiraf7.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.moreiraf7.course.entities.pk.OrderItemPK;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,7 +14,7 @@ public class OrderItem implements Serializable {
 
     //CHAVE PRIMÁRIA
     @EmbeddedId
-    private OrderItemPK id;
+    private OrderItemPK id = new OrderItemPK(); // Sempre que for criar id compostos é necessário instanciar o objeto
 
     private Integer quantity;
     private Double price;
@@ -36,6 +35,7 @@ public class OrderItem implements Serializable {
         this.price = price;
     }
 
+    @JsonIgnore // Como essa classe não possui o atributo Order direto, é passado a anotation no get
     public Order getOrder(){
         return id.getOrder();
     }

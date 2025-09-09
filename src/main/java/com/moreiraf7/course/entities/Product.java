@@ -1,5 +1,6 @@
 package com.moreiraf7.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -24,6 +25,9 @@ public class Product implements Serializable {
             joinColumns = @JoinColumn(name = "product_id"), // Nome da chave estrangeira referente a tabela Product
             inverseJoinColumns = @JoinColumn(name = "category_id")) // Nome da chave estrangeira referente a tabela Category
     private Set<Category> categories = new HashSet<>(); // Utilizei o set para garantir que um produto não tenha a mesma categoria mais de uma vez
+
+    @OneToMany(mappedBy = "id.product") // Instrui o JPA para tranformar a associação em chave estrangeira
+    private Set<OrderItem> items = new HashSet<>(); //Coleção de items
 
     public Product() {
     }
@@ -78,6 +82,17 @@ public class Product implements Serializable {
 
     public Set<Category> getCategories() {
         return categories;
+    }
+
+    //get dos pedidos em que contém o produto
+    @JsonIgnore // Para que o metodo seja ignorado e não apareça no json
+    public Set<Order> getOrders() {
+        Set<Order> set = new HashSet<>();
+        // Para cada item x eu adiciono ao set o pedido que contêm o item
+        for(OrderItem x : items){
+            set.add(x.getOrder());
+        }
+        return set; // Retorno a coleção com todos os pedidos que contêm o item
     }
 
     @Override

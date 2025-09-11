@@ -2,6 +2,7 @@ package com.moreiraf7.course.services;
 
 import com.moreiraf7.course.entities.User;
 import com.moreiraf7.course.repositories.UserRepository;
+import com.moreiraf7.course.services.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,8 @@ public class UserService {
     //Metodo para encontrar o user pelo id
     public User findById(Long id) {
         Optional<User> obj = repository.findById(id);
-        return obj.get(); // retorna o objeto do tipo user que estiver dentro de obj
+        // Tenta retornar o obj, se não conseguir retorna uma exceção
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     //Operação basica para inserir no banco de dados um novo objeto do tipo User

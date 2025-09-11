@@ -4,9 +4,9 @@ import com.moreiraf7.course.entities.User;
 import com.moreiraf7.course.repositories.UserRepository;
 import com.moreiraf7.course.services.exception.DataBaseException;
 import com.moreiraf7.course.services.exception.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,9 +48,13 @@ public class UserService {
 
     //Operações para atualizar o objeto User
     public User update(Long id, User obj) {
-        User entity = repository.getReferenceById(id);
-        updateData(entity, obj);
-        return repository.save(entity);
+        try {
+            User entity = repository.getReferenceById(id);
+            updateData(entity, obj);
+            return repository.save(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id); // tratamento de excecção  de objeto não encontrado.
+        }
     }
 
     private void updateData(User entity, User obj) {

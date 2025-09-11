@@ -96,6 +96,16 @@ public class Order implements Serializable {
         this.payment = payment;
     }
 
+    //Metodo para calcular o total do pedido
+    //No Java Enterprise para aparecer no Json o que vale é o get, por tanto colocamos um get no metodo
+    public Double getTotal(){
+        double sum = 0;
+        for(OrderItem x: items){
+         sum += x.getSubtotal();
+        }
+        return sum;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -69,6 +69,12 @@ public class OrderItem implements Serializable {
         this.price = price;
     }
 
+    //Metodo para calcular o subtotal do item
+    //No Java Enterprise para aparecer no Json o que vale é o get, por tanto colocamos um get no metodo
+    public Double getSubtotal(){
+        return quantity * price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

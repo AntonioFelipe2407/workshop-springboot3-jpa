@@ -1,5 +1,6 @@
 package com.moreiraf7.course.resources.exceptions;
 
+import com.moreiraf7.course.services.exception.DataBaseException;
 import com.moreiraf7.course.services.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,8 @@ import java.time.Instant;
 public class ResourceExceptionHandler {
 
     /*
-    * Classe responsável pelo tratamento manual dos erros.
-    */
+     * Classe responsável pelo tratamento manual dos erros.
+     */
 
     //Metodo que retorna a requisição com o erro ResourceNotFoundException tratado.
     //Anotation pega toda a exceção desse tipo que acontecer para que seja tratada
@@ -25,4 +26,13 @@ public class ResourceExceptionHandler {
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
+
+    @ExceptionHandler(DataBaseException.class)
+    public ResponseEntity<StandardError> database(DataBaseException e, HttpServletRequest request) {
+        String error = "Database error";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
 }

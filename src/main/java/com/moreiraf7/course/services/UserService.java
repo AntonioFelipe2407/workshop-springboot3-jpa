@@ -2,8 +2,11 @@ package com.moreiraf7.course.services;
 
 import com.moreiraf7.course.entities.User;
 import com.moreiraf7.course.repositories.UserRepository;
+import com.moreiraf7.course.services.exception.DataBaseException;
 import com.moreiraf7.course.services.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,11 +37,17 @@ public class UserService {
 
     //Operação básica para deletar um objeto User
     public void delete(Long id) {
-        repository.deleteById(id);
+        // tratamento de excecção  de objeto não encontrado.
+        repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        try {
+            repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBaseException(e.getMessage()); // tratamento de excecção de database error.
+        }
     }
 
     //Operações para atualizar o objeto User
-    public User update(Long id, User obj){
+    public User update(Long id, User obj) {
         User entity = repository.getReferenceById(id);
         updateData(entity, obj);
         return repository.save(entity);

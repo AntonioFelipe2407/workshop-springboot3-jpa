@@ -26,13 +26,14 @@ public class UserResource {
 
     // Ao pesquisar na requisição GET user/1 -> retorna o usuário com o id pesquisado
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id){
+    public ResponseEntity<User> findById(@PathVariable Long id) {
         User obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
+    //Endpoint para inserir
     @PostMapping
-    public ResponseEntity<User> insert(@RequestBody User obj){
+    public ResponseEntity<User> insert(@RequestBody User obj) {
         obj = service.insert(obj);
         //Gerando um endereço para inserir um recurso
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -40,4 +41,10 @@ public class UserResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
+    //Endpoint para deletar
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
